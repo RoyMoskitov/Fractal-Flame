@@ -41,11 +41,11 @@ public class InputHandler {
 
     private Transformation mapToTransformation(Integer idx) {
         return switch (idx) {
-            case 1 -> new BlurTransformation(String.valueOf(System.nanoTime()));
+            case 1 -> new BlurTransformation();
             case 2 -> new CrossTransformation();
             case 3 -> new EyeFishTransformation();
             case 4 -> new HeartTransformation();
-            case 5 -> new JuliaTransformation(String.valueOf(System.nanoTime()));
+            case 5 -> new JuliaTransformation();
             default -> throw new IllegalArgumentException("Cannot map this value to transformation type): " + idx);
         };
     }

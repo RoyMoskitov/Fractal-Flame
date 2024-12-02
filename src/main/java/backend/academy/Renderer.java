@@ -18,7 +18,7 @@ public class Renderer {
         int samples, short iterPerSample, String seed
     ) {
         SecureRandom random = new SecureRandom(seed.getBytes());
-        LinearTransformation linearTransformation = new LinearTransformation(seed);
+        LinearTransformation linearTransformation = new LinearTransformation();
         for (int num = -20; num < samples; ++num) {
             Point pw = randomPoint(world, random);
             if (num < 0) {

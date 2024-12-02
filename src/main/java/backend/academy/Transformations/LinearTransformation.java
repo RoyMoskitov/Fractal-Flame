@@ -1,10 +1,9 @@
 package backend.academy.Transformations;
 
 import backend.academy.Model.Point;
-import java.security.SecureRandom;
+import java.util.concurrent.ThreadLocalRandom;
 
 public final class LinearTransformation implements Transformation {
-    SecureRandom random;
     int colorIdx;
     double[][] coefficients = {
         {0.5, 0.5, -0.5, 0.5, 0.5, -0.5},
@@ -30,14 +29,9 @@ public final class LinearTransformation implements Transformation {
 
     };
 
-
-    public LinearTransformation(String seed) {
-        random = new SecureRandom(seed.getBytes());
-    }
-
     @Override
     public Point apply(Point point) {
-        colorIdx = random.nextInt(coefficients.length);
+        colorIdx = ThreadLocalRandom.current().nextInt(coefficients.length);
         double[] coef = coefficients[colorIdx];
         double x = coef[0] * point.x() + coef[1] * point.y() + coef[4];
         double y = coef[2] * point.x() + coef[3] * point.y() + coef[5];

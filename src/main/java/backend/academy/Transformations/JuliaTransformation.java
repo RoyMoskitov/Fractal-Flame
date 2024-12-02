@@ -1,15 +1,9 @@
 package backend.academy.Transformations;
 
 import backend.academy.Model.Point;
-import java.security.SecureRandom;
+import java.util.concurrent.ThreadLocalRandom;
 
 public final class JuliaTransformation implements Transformation {
-
-    private final SecureRandom random;
-
-    public JuliaTransformation(String seed) {
-        random = new SecureRandom(seed.getBytes());
-    }
 
     @Override
     public Point apply(Point point) {
@@ -18,7 +12,7 @@ public final class JuliaTransformation implements Transformation {
         double theta = Math.atan2(point.y(), point.x());
 
         // Ω равен 0 или π
-        double omega = random.nextBoolean() ? 0 : Math.PI;
+        double omega = ThreadLocalRandom.current().nextBoolean() ? 0 : Math.PI;
 
         // Вычисление новых координат
         double newX = Math.sqrt(r) * Math.cos(theta / 2 + omega);
