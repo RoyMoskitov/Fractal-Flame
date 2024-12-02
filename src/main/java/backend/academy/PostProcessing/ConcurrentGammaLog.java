@@ -1,9 +1,8 @@
 package backend.academy.PostProcessing;
 
 import backend.academy.Model.FractalImage;
-import java.util.concurrent.ExecutorService;
 
-public class GammaLogCorrection implements ImageProcessor {
+public class ConcurrentGammaLog implements ImageProcessor {
 
     private final static double GAMMA = 2.2;
 
@@ -21,6 +20,7 @@ public class GammaLogCorrection implements ImageProcessor {
                 }
             }
         }
+
 
         for (int i = 0; i < image.height(); ++i) {
             for (int j = 0; j < image.width(); ++j) {

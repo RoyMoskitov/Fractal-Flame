@@ -7,6 +7,7 @@ import backend.academy.Transformations.LinearTransformation;
 import backend.academy.Transformations.Transformation;
 import java.security.SecureRandom;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 public class Renderer {
 
@@ -46,16 +47,18 @@ public class Renderer {
         int x = (int) ((pwr.x() - world.x()) / world.width() * canvas.width());
         int y = (int) ((pwr.y() - world.y()) / world.height() * canvas.height());
         if (canvas.contains(x, y)) {
-            if (canvas.pixel(x, y).hitCount() == 0) {
-                canvas.pixel(x, y).r(baseColor[0]);
-                canvas.pixel(x, y).g(baseColor[1]);
-                canvas.pixel(x, y).b(baseColor[2]);
-            } else {
-                canvas.pixel(x, y).r((canvas.pixel(x, y).r() + baseColor[0]) / 2);
-                canvas.pixel(x, y).g((canvas.pixel(x, y).g() + baseColor[0]) / 2);
-                canvas.pixel(x, y).b((canvas.pixel(x, y).b() + baseColor[0]) / 2);
+            synchronized (canvas.pixel(x, y)) {
+                if (canvas.pixel(x, y).hitCount() == 0) {
+                    canvas.pixel(x, y).r(baseColor[0]);
+                    canvas.pixel(x, y).g(baseColor[1]);
+                    canvas.pixel(x, y).b(baseColor[2]);
+                } else {
+                    canvas.pixel(x, y).r((canvas.pixel(x, y).r() + baseColor[0]) / 2);
+                    canvas.pixel(x, y).g((canvas.pixel(x, y).g() + baseColor[0]) / 2);
+                    canvas.pixel(x, y).b((canvas.pixel(x, y).b() + baseColor[0]) / 2);
+                }
+                canvas.pixel(x, y).hitCount(canvas.pixel(x, y).hitCount() + 1);
             }
-            canvas.pixel(x, y).hitCount(canvas.pixel(x, y).hitCount() + 1);
         }
 
     }
