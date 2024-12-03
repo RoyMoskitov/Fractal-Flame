@@ -55,7 +55,7 @@ public class InputHandler {
         String choice;
         do {
             output.println("Choose " + transformationNumber + " transformations " +
-                "(each number must be separated by space:");
+                "(each number must be separated by space) :");
             for (int i = 0; i < AVAILABLE_TRANSFORMATIONS_LIST.size(); i++) {
                 output.println((i + 1) + ". " + AVAILABLE_TRANSFORMATIONS_LIST.get(i));
             }

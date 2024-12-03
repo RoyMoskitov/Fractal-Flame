@@ -7,11 +7,10 @@ import backend.academy.Transformations.LinearTransformation;
 import backend.academy.Transformations.Transformation;
 import java.security.SecureRandom;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 
 public class Renderer {
 
-    private static final int symmetry = 1;
+    public static final int SYMMETRY = 1;
 
     public static void render(
         FractalImage canvas, Rect world, List<Transformation> variations,
@@ -32,7 +31,7 @@ public class Renderer {
                 pw = nonLinearTransformation.apply(pw);
 
                 double theta2 = 0.0;
-                for (int s = 0; s < symmetry; theta2 += Math.PI * 2 / symmetry, ++s) {
+                for (int s = 0; s < SYMMETRY; theta2 += Math.PI * 2 / SYMMETRY, ++s) {
                     var pwr = rotate(pw, theta2);
                     if (!world.contains(pwr)) {
                         continue;
@@ -48,20 +47,16 @@ public class Renderer {
         int y = (int) ((pwr.y() - world.y()) / world.height() * canvas.height());
         if (canvas.contains(x, y)) {
             synchronized (canvas.pixel(x, y)) {
-                if (canvas.pixel(x, y).hitCount() == 0) {
-                    canvas.pixel(x, y).r(baseColor[0]);
-                    canvas.pixel(x, y).g(baseColor[1]);
-                    canvas.pixel(x, y).b(baseColor[2]);
-                } else {
-                    canvas.pixel(x, y).r((canvas.pixel(x, y).r() + baseColor[0]) / 2);
-                    canvas.pixel(x, y).g((canvas.pixel(x, y).g() + baseColor[0]) / 2);
-                    canvas.pixel(x, y).b((canvas.pixel(x, y).b() + baseColor[0]) / 2);
-                }
+                canvas.pixel(x, y).r(baseColor[0]);
+                canvas.pixel(x, y).g(baseColor[1]);
+                canvas.pixel(x, y).b(baseColor[2]);
+                //canvas.pixel(x, y).hitCount().getAndIncrement();
                 canvas.pixel(x, y).hitCount(canvas.pixel(x, y).hitCount() + 1);
             }
         }
-
     }
+
+
 
     private static Point rotate(Point pw, double theta) {
         double x = pw.x() * Math.cos(theta) - pw.y() * Math.sin(theta);
