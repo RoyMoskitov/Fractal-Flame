@@ -30,9 +30,9 @@ public class FractalFlameController {
     public static final Integer MAX_SAMPLES = 10_000_000;
     public static final Integer MAX_THREADS = 12;
     public static final Short ITERATIONS_PER_SAMPLE = 50;
-    public static String pictureName = "FractalFlame";
+    public static final Integer MAX_TIMEOUT = 30;
+    public static final String pictureName = "FractalFlame";
     public static final ImageFormat IMAGE_FORMAT = ImageFormat.PNG;
-    public static final Integer TIMEOUT = 30;
     public static final List<ImageProcessor> IMAGE_PROCESSOR_LIST = List.of(new GammaLogCorrection());
     InputHandler inputHandler;
 
@@ -73,7 +73,7 @@ public class FractalFlameController {
 
         executor.invokeAll(createPictureTasks);
         executor.shutdown();
-        boolean terminated = executor.awaitTermination(30, TimeUnit.MINUTES);
+        boolean terminated = executor.awaitTermination(MAX_TIMEOUT, TimeUnit.MINUTES);
         if (!terminated) {
             inputHandler.printText("Timeout expired before termination.");
         }

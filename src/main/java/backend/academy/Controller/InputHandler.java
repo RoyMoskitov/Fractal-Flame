@@ -8,7 +8,6 @@ import backend.academy.Transformations.JuliaTransformation;
 import backend.academy.Transformations.Transformation;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +15,7 @@ import java.util.List;
 import java.util.Scanner;
 import static org.apache.commons.validator.GenericValidator.isInt;
 
+@SuppressWarnings("MultipleStringLiterals")
 public class InputHandler {
 
     //this field must be changed if new transformations are added
@@ -39,6 +39,7 @@ public class InputHandler {
         return transformations;
     }
 
+    @SuppressWarnings("MagicNumber")
     private Transformation mapToTransformation(Integer idx) {
         return switch (idx) {
             case 1 -> new BlurTransformation();
@@ -54,8 +55,8 @@ public class InputHandler {
         List<Integer> transformationIndices;
         String choice;
         do {
-            output.println("Choose " + transformationNumber + " transformations " +
-                "(each number must be separated by space) :");
+            output.println("Choose " + transformationNumber + " transformations "
+                + "(each number must be separated by space) :");
             for (int i = 0; i < AVAILABLE_TRANSFORMATIONS_LIST.size(); i++) {
                 output.println((i + 1) + ". " + AVAILABLE_TRANSFORMATIONS_LIST.get(i));
             }
@@ -72,8 +73,8 @@ public class InputHandler {
 
             if (transformationIndices.stream().anyMatch(index -> index < 1
                 || index > AVAILABLE_TRANSFORMATIONS_LIST.size())) {
-                System.out.println("Some indices are out of range. Choose numbers between 1 and " +
-                    AVAILABLE_TRANSFORMATIONS_LIST.size() + ".");
+                output.println("Some indices are out of range. Choose numbers between 1 and "
+                    + AVAILABLE_TRANSFORMATIONS_LIST.size() + ".");
                 continue;
             }
 

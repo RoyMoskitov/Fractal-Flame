@@ -12,6 +12,7 @@ public final class ImageUtils {
     private ImageUtils() {
     }
 
+    @SuppressWarnings("MagicNumber")
     public static void save(FractalImage image, Path filename, ImageFormat format) {
         BufferedImage bufferedImage = new BufferedImage(image.width(), image.height(), BufferedImage.TYPE_INT_RGB);
         for (int i = 0; i < image.width(); i++) {
@@ -25,7 +26,7 @@ public final class ImageUtils {
         try {
             ImageIO.write(bufferedImage, format.name().toLowerCase(Locale.ENGLISH), filename.toFile());
         } catch (IOException e) {
-            System.out.println("Error occurred during writing in file: " + e.getMessage());
+            throw new RuntimeException();
         }
     }
 }

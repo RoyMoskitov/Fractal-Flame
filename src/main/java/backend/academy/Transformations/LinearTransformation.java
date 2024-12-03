@@ -3,6 +3,7 @@ package backend.academy.Transformations;
 import backend.academy.Model.Point;
 import java.util.concurrent.ThreadLocalRandom;
 
+@SuppressWarnings("MagicNumber")
 public final class LinearTransformation implements Transformation {
     int colorIdx;
     double[][] coefficients = {

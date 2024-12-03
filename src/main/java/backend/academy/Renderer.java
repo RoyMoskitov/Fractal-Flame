@@ -11,6 +11,10 @@ import java.util.List;
 public class Renderer {
 
     public static final int SYMMETRY = 1;
+    public static final int STARTING_ITERATION = -20;
+
+    private Renderer() {
+    }
 
     public static void render(
         FractalImage canvas, Rect world, List<Transformation> variations,
@@ -18,12 +22,12 @@ public class Renderer {
     ) {
         SecureRandom random = new SecureRandom(seed.getBytes());
         LinearTransformation linearTransformation = new LinearTransformation();
-        for (int num = -20; num < samples; ++num) {
+        for (int num = STARTING_ITERATION; num < samples; ++num) {
             Point pw = randomPoint(world, random);
             if (num < 0) {
                 continue;
             }
-            for (short step = -20; step < iterPerSample; ++step) {
+            for (short step = STARTING_ITERATION; step < iterPerSample; ++step) {
 
                 Transformation nonLinearTransformation = randomTransformation(variations, random);
                 int[] color = linearTransformation.getColor();
@@ -55,8 +59,6 @@ public class Renderer {
             }
         }
     }
-
-
 
     private static Point rotate(Point pw, double theta) {
         double x = pw.x() * Math.cos(theta) - pw.y() * Math.sin(theta);
