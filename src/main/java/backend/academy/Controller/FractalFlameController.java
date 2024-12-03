@@ -89,6 +89,7 @@ public class FractalFlameController {
         Path path = Paths.get(PICTURE_NAME + "." + IMAGE_FORMAT.toString().toLowerCase());
         ImageUtils.save(image, path, IMAGE_FORMAT);
 
+
         inputHandler.printText("Image generated successfully");
     }
 }
