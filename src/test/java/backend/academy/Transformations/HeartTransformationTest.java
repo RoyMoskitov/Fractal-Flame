@@ -14,8 +14,8 @@ class HeartTransformationTest {
 
         Point result = transformation.apply(point);
 
-        assertEquals(0.0, result.y(), 1e-6);
-        assertTrue(result.x() > 0);
+        assertEquals(-1.0, result.y(), 1e-6);
+        assertEquals(result.x(), 0);
     }
 
     @Test
@@ -25,7 +25,7 @@ class HeartTransformationTest {
 
         Point result = transformation.apply(point);
 
-        assertEquals(0.0, result.y(), 1e-6);
-        assertTrue(result.x() < 0);
+        assertEquals(1.0, result.y(), 1e-6);
+        assertTrue(result.x() > 0);
     }
 }

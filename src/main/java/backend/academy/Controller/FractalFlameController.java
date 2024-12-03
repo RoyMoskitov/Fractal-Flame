@@ -31,7 +31,7 @@ public class FractalFlameController {
     public static final Integer MAX_THREADS = 12;
     public static final Short ITERATIONS_PER_SAMPLE = 50;
     public static final Integer MAX_TIMEOUT = 30;
-    public static final String pictureName = "FractalFlame";
+    public static final String PICTURE_NAME = "FractalFlame";
     public static final ImageFormat IMAGE_FORMAT = ImageFormat.PNG;
     public static final List<ImageProcessor> IMAGE_PROCESSOR_LIST = List.of(new GammaLogCorrection());
     InputHandler inputHandler;
@@ -86,7 +86,7 @@ public class FractalFlameController {
             imageProcessor.process(image);
         }
 
-        Path path = Paths.get(pictureName + "." + IMAGE_FORMAT.toString().toLowerCase());
+        Path path = Paths.get(PICTURE_NAME + "." + IMAGE_FORMAT.toString().toLowerCase());
         ImageUtils.save(image, path, IMAGE_FORMAT);
 
         inputHandler.printText("Image generated successfully");
