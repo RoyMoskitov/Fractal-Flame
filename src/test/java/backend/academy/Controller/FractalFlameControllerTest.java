@@ -25,7 +25,7 @@ class FractalFlameControllerTest {
 
         controller.createImage();
 
-        Path savedImagePath = Paths.get(FractalFlameController.pictureName + "."
+        Path savedImagePath = Paths.get(FractalFlameController.PICTURE_NAME + "."
             + FractalFlameController.IMAGE_FORMAT.toString().toLowerCase());
 
         assertTrue(Files.exists(savedImagePath));
