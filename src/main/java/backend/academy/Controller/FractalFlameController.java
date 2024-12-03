@@ -19,6 +19,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Main controller that is responsible for interacting with user,
+ * allows to create a fractal flame picture using not more that MAX_THREADS threads
+ */
 public class FractalFlameController {
 
     public static final Double LEFT_WORLD_WIDTH_BORDER = -1.77;

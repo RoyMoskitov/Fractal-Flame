@@ -15,6 +15,10 @@ import java.util.List;
 import java.util.Scanner;
 import static org.apache.commons.validator.GenericValidator.isInt;
 
+/**
+ * Class that is responsible for working with user input,
+ * defines parameters that user entered and apply them to the picture
+ */
 @SuppressWarnings("MultipleStringLiterals")
 public class InputHandler {
 

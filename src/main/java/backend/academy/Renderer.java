@@ -8,9 +8,19 @@ import backend.academy.Transformations.Transformation;
 import java.security.SecureRandom;
 import java.util.List;
 
+/**
+ * Generates a fractal flame image by applying a series of transformations
+ * to randomly generated points within a rectangular area (world), which is later mapped on your image
+ */
 public class Renderer {
 
+    /**
+     *  Defines the number of symmetrical transformations to apply
+     */
     public static final int SYMMETRY = 1;
+    /**
+     * Sets the initial iteration value for rendering
+     */
     public static final int STARTING_ITERATION = -20;
 
     private Renderer() {

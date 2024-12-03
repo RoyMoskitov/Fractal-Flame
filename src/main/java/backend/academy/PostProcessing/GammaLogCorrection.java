@@ -2,6 +2,11 @@ package backend.academy.PostProcessing;
 
 import backend.academy.Model.FractalImage;
 
+/**
+ * Implementation of imageProcessor that process image after it was created by renderer,
+ * makes the picture more aesthetically attractive,
+ * making places where there are not many colored pixels even darker
+ */
 public class GammaLogCorrection implements ImageProcessor {
 
     private final static double GAMMA = 2.2;

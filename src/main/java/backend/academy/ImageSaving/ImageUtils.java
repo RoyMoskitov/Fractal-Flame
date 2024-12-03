@@ -8,6 +8,9 @@ import java.nio.file.Path;
 import java.util.Locale;
 import javax.imageio.ImageIO;
 
+/**
+ * Utility class used to save pictures after rendering
+ */
 public final class ImageUtils {
     private ImageUtils() {
     }
