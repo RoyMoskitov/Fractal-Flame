@@ -24,14 +24,7 @@ public class ConcurrentGammaLogCorrection implements ImageProcessor {
         double localMax = Double.MIN_VALUE;
         double[][] normals = new double[image.height()][image.width()];
         for (int i = startIdx; i < endIdx; ++i) {
-            for (int j = 0; j < image.width(); ++j) {
-                if (image.pixel(j, i).hitCount() != 0) {
-                    normals[i][j] = Math.log1p(image.pixel(j, i).hitCount());
-                    if (normals[i][j] > localMax) {
-                        localMax = normals[i][j];
-                    }
-                }
-            }
+            localMax = getLocalMax(image, localMax, normals, i);
         }
 
         globalMax.accumulateAndGet(localMax, Double::max);
@@ -39,19 +32,36 @@ public class ConcurrentGammaLogCorrection implements ImageProcessor {
 
         double max = globalMax.get();
         for (int i = startIdx; i < endIdx; ++i) {
-            for (int j = 0; j < image.width(); ++j) {
-                normals[i][j] /= max;
-                image.pixel(j, i).r(
-                    (int) (image.pixel(j, i).r() * Math.pow(normals[i][j], (1.0 / GAMMA)))
-                );
-                image.pixel(j, i).g(
-                    (int) (image.pixel(j, i).g() * Math.pow(normals[i][j], (1.0 / GAMMA)))
-                );
-                image.pixel(j, i).b(
-                    (int) (image.pixel(j, i).b() * Math.pow(normals[i][j], (1.0 / GAMMA)))
-                );
-            }
+            gammaCorrection(image, normals, max, i, GAMMA);
         }
 
+    }
+
+    static void gammaCorrection(FractalImage image, double[][] normals, double max, int i, double gamma) {
+        for (int j = 0; j < image.width(); ++j) {
+            normals[i][j] /= max;
+            image.pixel(j, i).r(
+                (int) (image.pixel(j, i).r() * Math.pow(normals[i][j], (1.0 / gamma)))
+            );
+            image.pixel(j, i).g(
+                (int) (image.pixel(j, i).g() * Math.pow(normals[i][j], (1.0 / gamma)))
+            );
+            image.pixel(j, i).b(
+                (int) (image.pixel(j, i).b() * Math.pow(normals[i][j], (1.0 / gamma)))
+            );
+        }
+    }
+
+    @SuppressWarnings("ParameterAssignment")
+    static double getLocalMax(FractalImage image, double localMax, double[][] normals, int i) {
+        for (int j = 0; j < image.width(); ++j) {
+            if (image.pixel(j, i).hitCount() != 0) {
+                normals[i][j] = Math.log1p(image.pixel(j, i).hitCount());
+                if (normals[i][j] > localMax) {
+                    localMax = normals[i][j];
+                }
+            }
+        }
+        return localMax;
     }
 }
