@@ -4,7 +4,7 @@ import backend.academy.ImageSaving.ImageFormat;
 import backend.academy.ImageSaving.ImageUtils;
 import backend.academy.Model.FractalImage;
 import backend.academy.Model.Rect;
-import backend.academy.PostProcessing.GammaLogCorrection;
+import backend.academy.PostProcessing.ConcurrentGammaLogCorrection;
 import backend.academy.PostProcessing.ImageProcessor;
 import backend.academy.Renderer;
 import backend.academy.Transformations.Transformation;
@@ -15,9 +15,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Main controller that is responsible for interacting with user,
@@ -37,7 +39,7 @@ public class FractalFlameController {
     public static final Integer MAX_TIMEOUT = 30;
     public static final String PICTURE_NAME = "FractalFlame";
     public static final ImageFormat IMAGE_FORMAT = ImageFormat.PNG;
-    public static final List<ImageProcessor> IMAGE_PROCESSOR_LIST = List.of(new GammaLogCorrection());
+    public static final List<ImageProcessor> IMAGE_PROCESSOR_LIST = List.of(new ConcurrentGammaLogCorrection());
     InputHandler inputHandler;
 
     public FractalFlameController(PrintStream output, InputStream input) {
@@ -76,6 +78,25 @@ public class FractalFlameController {
         }
 
         executor.invokeAll(createPictureTasks);
+
+        List<Callable<Void>> processPictureTask = new ArrayList<>();
+        AtomicReference<Double> globalMax = new AtomicReference<>(-1.0);
+        CyclicBarrier barrier = new CyclicBarrier(threadNum);
+        for (int i = 0; i < threadNum; i++) {
+            int finalI = i;
+            processPictureTask.add(() -> {
+                for (var imageProcessor : IMAGE_PROCESSOR_LIST) {
+                    imageProcessor.process(image, (finalI == 0) ? 0 : (image.height() / threadNum) * finalI,
+                        (finalI == (threadNum - 1)) ? (image.height() - 1)
+                            : (image.height() / threadNum) * (finalI + 1),
+                        globalMax, barrier);
+                }
+                return null;
+            });
+        }
+
+        executor.invokeAll(processPictureTask);
+
         executor.shutdown();
         boolean terminated = executor.awaitTermination(MAX_TIMEOUT, TimeUnit.MINUTES);
         if (!terminated) {
@@ -86,13 +107,8 @@ public class FractalFlameController {
         long timeElapsed = endTime - startTime;
         inputHandler.printText("Elapsed time: " + timeElapsed);
 
-        for (var imageProcessor : IMAGE_PROCESSOR_LIST) {
-            imageProcessor.process(image);
-        }
-
         Path path = Paths.get(PICTURE_NAME + "." + IMAGE_FORMAT.toString().toLowerCase());
         ImageUtils.save(image, path, IMAGE_FORMAT);
-
 
         inputHandler.printText("Image generated successfully");
     }
